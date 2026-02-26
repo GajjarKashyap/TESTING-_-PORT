@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gajjar Kashyap</title>
-   <link rel="icon" type="image/gif/png" href="Untitled.png">
+  <link rel="icon" type="image/gif/png" href="Untitled.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,70 +40,78 @@
       }
     }
   </script>
-  
+
   <!-- new style -->
   <style>
-	/* Fixed: Exact Theme Colors & Smaller Edge Gradients */
-.marquee-container {
-  position: relative;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
-  height: 2.5em;
-  font-size: clamp(40px, 6vw, 80px);
-  font-family: 'Playfair Display', serif;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  /* Shrunk the smooth fade on the far edges down to 3% */
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%);
-  mask-image: linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%);
-}
+    /* Fixed: Exact Theme Colors & Smaller Edge Gradients */
+    .marquee-container {
+      position: relative;
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
+      height: 2.5em;
+      font-size: clamp(40px, 6vw, 80px);
+      font-family: 'Playfair Display', serif;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+    }
 
-.marquee_text {
-  position: absolute;
-  white-space: nowrap;
-  animation: marqueeSweep 18s infinite linear;
-  will-change: transform;
-}
+    /* Inner track holds TWO identical copies so -50% loops perfectly with zero jump */
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marqueeLoop 100s infinite linear;
+      will-change: transform;
+    }
 
-@keyframes marqueeSweep {
-  from { transform: translateX(20%); }
-  to { transform: translateX(-80%); }
-}
+    .marquee-track>span {
+      white-space: nowrap;
+      padding-right: 3em;
+    }
 
-.marquee_blur {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  /* Turns invisible to let your #F5F0EB section background show through perfectly */
-  background-color: white; 
-  /* Shrunk the "wall" width down to 2% and applied your #1A1A1A color */
-  background-image:
-    linear-gradient(to right, #1A1A1A 0%, transparent 2%),
-    linear-gradient(to left, #1A1A1A 0%, transparent 2%);
-  filter: contrast(35);
-  mix-blend-mode: multiply; 
-  z-index: 1;
-}
+    @keyframes marqueeLoop {
+      from {
+        transform: translateX(0);
+      }
 
-.marquee_blur .marquee_text {
-  color: #1A1A1A; /* Applied your exact text color */
-  filter: blur(0.06em); /* Tightened the blur slightly for a cleaner melt */
-}
+      to {
+        transform: translateX(-50%);
+      }
+    }
 
-.marquee_clear {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  z-index: 1;
-}
+    .marquee_blur {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      background-color: white;
+      background-image:
+        linear-gradient(to right, #1A1A1A 0%, transparent 2%),
+        linear-gradient(to left, #1A1A1A 0%, transparent 2%);
+      filter: contrast(35);
+      mix-blend-mode: multiply;
+      z-index: 1;
+    }
 
-.marquee_clear .marquee_text {
-  color: #1A1A1A; /* Applied your exact text color */
-}
-</style>
+    .marquee_blur .marquee-track {
+      color: #1A1A1A;
+      filter: blur(0.06em);
+    }
+
+    .marquee_clear {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      z-index: 1;
+    }
+
+    .marquee_clear .marquee-track {
+      color: #1A1A1A;
+    }
+  </style>
   <style type="text/tailwindcss">
     @layer base {
             body {
@@ -148,30 +156,50 @@
             }
         }
     </style>
-	<style>
-		/* Philosophy stretch effect */
-			#philosophy-text span {
-			display: inline-block;
-		transform-origin: bottom center;
-		transition: transform 0.35s cubic-bezier(.25,.46,.45,.94);
-		}
+  <style>
+    /* ── Scroll Reveal Animation ── */
+    @keyframes revealUp {
+      from {
+        opacity: 0;
+        transform: translateY(36px);
+        filter: blur(4px);
+      }
 
-		#philosophy-text span:hover {
-			transform: scale(0.88, 1.35);
-		}
+      to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
 
-		/* first neighbors */
-		#philosophy-text span:hover + span,
-		#philosophy-text span:has(+ span:hover) {
-		transform: scale(0.94, 1.18);
-		}
+    .reveal-block.in-view {
+      animation: revealUp 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+  </style>
+  <style>
+    /* Philosophy stretch effect */
+    #philosophy-text span {
+      display: inline-block;
+      transform-origin: bottom center;
+      transition: transform 0.35s cubic-bezier(.25, .46, .45, .94);
+    }
 
-		/* second neighbors */
-		#philosophy-text span:hover + span + span,
-		#philosophy-text span:has(+ span + span:hover) {
-		transform: scale(0.97, 1.08);
-		}
-	</style>
+    #philosophy-text span:hover {
+      transform: scale(0.88, 1.35);
+    }
+
+    /* first neighbors */
+    #philosophy-text span:hover+span,
+    #philosophy-text span:has(+ span:hover) {
+      transform: scale(0.94, 1.18);
+    }
+
+    /* second neighbors */
+    #philosophy-text span:hover+span+span,
+    #philosophy-text span:has(+ span + span:hover) {
+      transform: scale(0.97, 1.08);
+    }
+  </style>
 </head>
 
 <body class="selection:bg-theme-accent selection:text-white overflow-x-hidden">
@@ -204,13 +232,17 @@
     <div id="mobile-menu"
       class="fixed inset-0 bg-theme-dark text-white flex flex-col justify-center items-center gap-8 -translate-y-full transition-transform duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] z-[55] hidden">
       <a href="#about"
-        class="font-display text-[clamp(40px,5vw,72px)] italic hover:text-theme-accent transition-colors duration-500 nav-menu-link">> About</a>
+        class="font-display text-[clamp(40px,5vw,72px)] italic hover:text-theme-accent transition-colors duration-500 nav-menu-link">>
+        About</a>
       <a href="#projects"
-        class="font-display text-[clamp(40px,5vw,72px)] italic hover:text-theme-accent transition-colors duration-500 nav-menu-link">> Projects</a>
+        class="font-display text-[clamp(40px,5vw,72px)] italic hover:text-theme-accent transition-colors duration-500 nav-menu-link">>
+        Projects</a>
       <a href="#security"
-        class="font-display text-[clamp(40px,5vw,72px)] italic hover:text-theme-accent transition-colors duration-500 nav-menu-link">> Security</a>
+        class="font-display text-[clamp(40px,5vw,72px)] italic hover:text-theme-accent transition-colors duration-500 nav-menu-link">>
+        Security</a>
       <a href="#contact"
-        class="font-display text-[clamp(40px,5vw,72px)] italic hover:text-theme-accent transition-colors duration-500 nav-menu-link">> Contact</a>
+        class="font-display text-[clamp(40px,5vw,72px)] italic hover:text-theme-accent transition-colors duration-500 nav-menu-link">>
+        Contact</a>
 
       <div class="absolute bottom-10 flex gap-8 font-body text-[11px] uppercase tracking-[0.2em] text-theme-muted">
         <a href="#" class="hover:text-white transition-colors">Twitter</a>
@@ -227,7 +259,7 @@
         <div class="w-full flex justify-between items-end mb-16 fade-in-section is-visible">
           <!-- Made text slightly smaller and increased leading so 'g' is never cut off -->
           <h1
-            class="text-hover-interact font-display font-medium text-[clamp(48px,8vw,130px)] leading-[1.05] tracking-[-0.03em] transition-all duration-500 hover:text-outline relative z-10 w-full inline-block pb-2">
+            class="reveal-block text-hover-interact font-display font-medium text-[clamp(48px,8vw,130px)] leading-[1.05] tracking-[-0.03em] transition-all duration-500 hover:text-outline relative z-10 w-full pb-2">
             My Build are<br><span class="italic text-theme-muted">Alwyas-Next</span><br>Level.
           </h1>
 
@@ -267,9 +299,8 @@
 
           <div class="fade-in-section" style="transition-delay: 150ms;">
             <h2
-              class="text-hover-interact font-display font-normal text-[clamp(32px,4vw,56px)] leading-[1.2] mb-12 indent-[10%] relative z-10">
-               I am Gajjar Kashayp.   Use AI as a power tool — not a shortcut — to build <span
-                class="italic">real
+              class="reveal-block text-hover-interact font-display font-normal text-[clamp(32px,4vw,56px)] leading-[1.2] mb-12 indent-[10%] relative z-10">
+              I am Gajjar Kashayp. Use AI as a power tool — not a shortcut — to build <span class="italic">real
                 software</span>. My brain drives the logic, the architecture, the vision. AI accelerates the execution.
               I'm constantly learning, constantly shipping/Growinig.
             </h2>
@@ -284,7 +315,7 @@
           <div>
             <span class="font-body text-[11px] uppercase tracking-[0.3em] text-theme-muted block mb-6">02 &mdash;
               Projects</span>
-            <h2 class="font-display font-normal text-[clamp(48px,6vw,96px)] leading-[1] tracking-tighter">
+            <h2 class="reveal-block font-display font-normal text-[clamp(48px,6vw,96px)] leading-[1] tracking-tighter">
               Selected<br><span class="italic text-theme-muted">Works.</span></h2>
           </div>
           <p class="text-theme-text font-serif italic text-[18px] max-w-xs">All Python. All solving real-world problems.
@@ -372,7 +403,8 @@
             <span class="font-body text-[11px] tracking-[0.3em] uppercase mb-6 text-theme-accent block">
               <span style="font-size:7px; margin-right:8px; opacity:0.6;">◆</span>03 &mdash; Security Mindset
             </span>
-            <h2 class="font-display font-normal text-[clamp(36px,5vw,68px)] leading-[1.1] text-white tracking-tighter">
+            <h2
+              class="reveal-block font-display font-normal text-[clamp(36px,5vw,68px)] leading-[1.1] text-white tracking-tighter">
               Breaking things<br><span class="italic text-theme-accent">to understand them.</span>
             </h2>
           </div>
@@ -468,46 +500,77 @@
           </p>
           <span
             class="font-mono text-[10px] uppercase tracking-[0.2em] border border-theme-accent/40 py-3 px-6 text-theme-accent whitespace-nowrap cursor-default hover:bg-theme-accent hover:text-theme-dark transition-colors duration-500">
-            ⚡ Kali Linux User
+            Kali Linux
           </span>
         </div>
 
       </div>
     </section>
 
-<!-- Philosophy Section -->
-<section class="py-[160px] px-6 lg:px-[7%] text-center bg-theme-bg border-t border-theme-border/30 overflow-hidden">
-  <div class="fade-in-section max-w-[1200px] mx-auto">
+    <!-- Philosophy Section -->
+    <section class="py-[160px] px-6 lg:px-[7%] text-center bg-theme-bg border-t border-theme-border/30 overflow-hidden">
+      <div class="fade-in-section max-w-[1200px] mx-auto">
 
-    <blockquote id="philosophy-text"
-    class="font-display text-[clamp(48px,8vw,96px)] italic font-light leading-[1.1] text-theme-text mb-10 tracking-tighter">
-      "I don't wait to be ready <br>
-      I build. I learn. I ship."
-    </blockquote>
+        <blockquote id="philosophy-text"
+          class="font-display text-[clamp(48px,8vw,96px)] italic font-light leading-[1.1] text-theme-text mb-10 tracking-tighter">
+          "Build it. Break it.<br>Understand it."
+        </blockquote>
 
-    <div class="font-body text-[12px] uppercase tracking-[0.3em] text-theme-muted mb-12">
-      The Philosophy
-    </div>
+        <div class="font-body text-[12px] uppercase tracking-[0.3em] text-theme-muted mb-12">
+          The Philosophy
+        </div>
 
-    <p class="font-body text-[16px] md:text-[18px] leading-[1.8] text-theme-muted max-w-[750px] mx-auto mb-20">
-      True understanding doesn't come from just reading documentation—it comes from getting your hands dirty. Whether I'm scripting an automation tool, digging into network security, or designing digital architecture, my approach is relentlessly hands-on. Theory is just the blueprint; breaking things apart, executing the logic, and engineering them back together is where the real growth happens. I build to solve problems, and in the process, I level up.
-    </p>
-  </div>
-
-  <div class="fade-in-section w-full max-w-[100vw] relative pt-10">
-    <div class="marquee-container">
-      
-      <div class="marquee_blur" aria-hidden="true">
-        <p class="marquee_text italic">&mdash; Logic &mdash; Tools &mdash; Mess &mdash; Security &mdash; Vision &mdash; Execution &mdash; Logic &mdash; Tools &mdash; Mess &mdash;</p>
+        <p class="font-body text-[16px] md:text-[18px] leading-[1.8] text-theme-muted max-w-[750px] mx-auto mb-20">
+          I don't learn by consuming — I learn by building. Every line of code starts with a deliberate question:
+          <em>Why does this work? What assumptions does it rely on? What fails under pressure?</em>
+          I deconstruct systems to understand their mechanics, then rebuild them stronger.
+          <br><br>
+          Security is not an afterthought or a checklist item — it's a constraint I design within from day one.
+          Architecture is not something I "figure out later" — it's the structural backbone I define before momentum
+          begins.
+          Decisions compound. Foundations matter.
+          <br><br>
+          I use AI as leverage, not as a crutch. Tools accelerate output, but ownership of logic, edge cases,
+          trade-offs, and long-term vision stays with me.
+          <br><br>
+          Growth isn't measured by tutorials completed — it's measured in systems shipped, failures diagnosed,
+          performance optimized, and complexity reduced. I build. I test. I break. I refine.
+          Then I ship — better than before.
+        </p>
       </div>
 
-      <div class="marquee_clear">
-        <p class="marquee_text italic">&mdash; Logic &mdash; Tools &mdash; Mess &mdash; Security &mdash; Vision &mdash; Execution &mdash; Logic &mdash; Tools &mdash; Mess &mdash;</p>
-      </div>
+      <div class="fade-in-section w-full max-w-[100vw] relative pt-10">
+        <div class="marquee-container">
 
-    </div>
-  </div>
-</section>
+          <div class="marquee_blur" aria-hidden="true">
+            <div class="marquee-track">
+              <span class="italic">&mdash; Systemize &mdash; Architect &mdash; Formalize &mdash; Abstract &mdash;
+                Synthesize &mdash; Orchestrate &mdash; Generalize &mdash; Deconstruct &mdash; Refactor &mdash; Harden
+                &mdash; Optimize &mdash; Modularize &mdash; Operationalize &mdash; Instrument &mdash; Validate &mdash;
+                Fortify &mdash; Scale &mdash; Engineer &mdash; Evolve &mdash; Transcend &mdash;</span>
+              <span class="italic">&mdash; Systemize &mdash; Architect &mdash; Formalize &mdash; Abstract &mdash;
+                Synthesize &mdash; Orchestrate &mdash; Generalize &mdash; Deconstruct &mdash; Refactor &mdash; Harden
+                &mdash; Optimize &mdash; Modularize &mdash; Operationalize &mdash; Instrument &mdash; Validate &mdash;
+                Fortify &mdash; Scale &mdash; Engineer &mdash; Evolve &mdash; Transcend &mdash;</span>
+            </div>
+          </div>
+
+          <div class="marquee_clear">
+            <div class="marquee-track">
+              <span class="italic">&mdash; Systemize &mdash; Architect &mdash; Formalize &mdash; Abstract &mdash;
+                Synthesize &mdash; Orchestrate &mdash; Generalize &mdash; Deconstruct &mdash; Refactor &mdash; Harden
+                &mdash; Optimize &mdash; Modularize &mdash; Operationalize &mdash; Instrument &mdash; Validate &mdash;
+                Fortify &mdash; Scale &mdash; Engineer &mdash; Evolve &mdash; Transcend &mdash;</span>
+              <span class="italic">&mdash; Systemize &mdash; Architect &mdash; Formalize &mdash; Abstract &mdash;
+                Synthesize &mdash; Orchestrate &mdash; Generalize &mdash; Deconstruct &mdash; Refactor &mdash; Harden
+                &mdash; Optimize &mdash; Modularize &mdash; Operationalize &mdash; Instrument &mdash; Validate &mdash;
+                Fortify &mdash; Scale &mdash; Engineer &mdash; Evolve &mdash; Transcend &mdash;</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
 
     <!-- Contact Section -->
     <section id="contact" class="section-padding py-[160px] border-t border-theme-border bg-[#EBE5DF]/50">
@@ -515,7 +578,8 @@
         <div>
           <span class="font-body text-[11px] uppercase tracking-[0.3em] text-theme-muted block mb-6">04 &mdash;
             Contact</span>
-          <h2 class="font-display font-normal text-[clamp(48px,7vw,100px)] leading-[0.9] tracking-tighter mb-8">
+          <h2
+            class="reveal-block font-display font-normal text-[clamp(48px,7vw,100px)] leading-[0.9] tracking-tighter mb-8">
             Let's Build<br><span class="italic text-theme-muted">Something.</span>
           </h2>
           <p class="text-theme-text font-serif italic text-[20px] max-w-sm">
@@ -560,42 +624,42 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.ripples/0.5.3/jquery.ripples.min.js"></script>
   <script src="script.js"></script>
   <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const el = document.getElementById("philosophy-text");
-  if (!el) return;
+    document.addEventListener("DOMContentLoaded", () => {
+      const el = document.getElementById("philosophy-text");
+      if (!el) return;
 
-  function wrapText(node) {
-    // Process only text nodes
-    if (node.nodeType === Node.TEXT_NODE) {
-      const text = node.textContent;
-      const frag = document.createDocumentFragment();
+      function wrapText(node) {
+        // Process only text nodes
+        if (node.nodeType === Node.TEXT_NODE) {
+          const text = node.textContent;
+          const frag = document.createDocumentFragment();
 
-      for (let i = 0; i < text.length; i++) {
-        const char = text[i];
+          for (let i = 0; i < text.length; i++) {
+            const char = text[i];
 
-        // keep spaces and new lines normal
-        if (char.trim() === "") {
-          frag.appendChild(document.createTextNode(char));
-        } else {
-          const span = document.createElement("span");
-          span.textContent = char;
-          frag.appendChild(span);
+            // keep spaces and new lines normal
+            if (char.trim() === "") {
+              frag.appendChild(document.createTextNode(char));
+            } else {
+              const span = document.createElement("span");
+              span.textContent = char;
+              frag.appendChild(span);
+            }
+          }
+
+          node.replaceWith(frag);
+        }
+
+        // Process all children (important fix)
+        else {
+          const children = Array.from(node.childNodes);
+          children.forEach(child => wrapText(child));
         }
       }
 
-      node.replaceWith(frag);
-    }
-
-    // Process all children (important fix)
-    else {
-      const children = Array.from(node.childNodes);
-      children.forEach(child => wrapText(child));
-    }
-  }
-
-  wrapText(el);
-});
-</script>
+      wrapText(el);
+    });
+  </script>
 </body>
 
 </html>
