@@ -195,8 +195,8 @@ function updateClock() {
 
 setInterval(updateClock, 1000);
 updateClock(); // Initial call
-// ----- Realistic Interactive WebGL Ripple on Hero -----
 
+// ----- Realistic Interactive WebGL Ripple on Hero -----
 $(document).ready(function () {
     const $heroText = $('h1.text-hover-interact');
     const $rippleSection = $('#water-ripple-wrapper');
@@ -210,11 +210,10 @@ $(document).ready(function () {
     const ctx = canvas.getContext('2d');
 
     // Create a high-contrast gradient for sharp water shadows
-    // Top-left: lighter, Bottom-right: darker shadows
     const grd = ctx.createLinearGradient(0, 0, 1024, 1024);
-    grd.addColorStop(0, '#FFFFFF'); // Highlight
-    grd.addColorStop(0.4, '#F5F0EB'); // Main Theme Bg
-    grd.addColorStop(1, '#D8D0C8'); // Deep Shadow color matching the theme
+    grd.addColorStop(0, '#FFFFFF');
+    grd.addColorStop(0.4, '#F5F0EB');
+    grd.addColorStop(1, '#D8D0C8');
 
     ctx.fillStyle = grd;
     ctx.fillRect(0, 0, 1024, 1024);
@@ -225,32 +224,26 @@ $(document).ready(function () {
         'background-size': 'cover',
         'background-repeat': 'no-repeat',
         'background-position': 'center',
-        'background-attachment': 'fixed' // Makes the gradient span smoothly as you scroll
+        'background-attachment': 'fixed'
     });
 
     try {
         $rippleSection.ripples({
-            resolution: 512, // High resolution for smooth water
-            dropRadius: 50, // Massive base radius spreads the wave out
-            perturbance: 0.05, // Lower perturbance makes the water less "choppy" and more glassy
-            // Disable mousemove ripples
+            resolution: 256,
+            dropRadius: 80,
+            perturbance: 0.05,
             interactive: false
         });
 
-        // Trigger a drop wave ANYWHERE in the wrapper on click, not hover
         $rippleSection.on('mousedown touchstart', function (e) {
-            // Get correct coordinates from event
             let clientX = e.clientX || (e.touches && e.touches[0].clientX);
             let clientY = e.clientY || (e.touches && e.touches[0].clientY);
 
             if (clientX !== undefined && clientY !== undefined) {
-                // Calculate position relative to the wrapper
                 const offset = $rippleSection.offset();
                 const x = clientX - offset.left;
                 const y = clientY - offset.top + $(window).scrollTop();
 
-                // By using a massive radius (80) and low strength (0.15), 
-                // it creates exactly 3 to 5 thick, slow waves instead of a buzzing vibration
                 $rippleSection.ripples('drop', x, y, 80, 0.15);
             }
         });
@@ -258,4 +251,27 @@ $(document).ready(function () {
     } catch (e) {
         console.warn("WebGL ripples failed to initialize.", e);
     }
+});
+
+// --- Line Reveal Animation ---
+document.addEventListener("DOMContentLoaded", () => {
+    const revealBlocks = document.querySelectorAll('.reveal-block');
+
+    const revealObserver = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('in-view');
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15, rootMargin: "0px 0px -40px 0px" });
+
+    revealBlocks.forEach((block) => {
+        // Hero h1 is already in viewport on page load - trigger after short delay
+        if (block.tagName === 'H1') {
+            setTimeout(() => block.classList.add('in-view'), 300);
+        } else {
+            revealObserver.observe(block);
+        }
+    });
 });
